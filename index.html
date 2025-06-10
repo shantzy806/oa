@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Repository Deposit Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Academic Repository Deposit Tool</h1>
+            <p class="header__subtitle">Automated workflow for QSpace repository deposits</p>
+            
+            <!-- Progress Indicator -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">DOI Input</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Metadata</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">PDF Check</div>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-label">Mapping</div>
+                    </div>
+                    <div class="progress-step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-label">Deposit</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Step 1: DOI Input -->
+            <div class="step-content active" id="step1">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Step 1: Enter DOIs</h2>
+                        <p>Enter one or more DOIs (one per line) to begin the automated deposit process.</p>
+                        
+                        <form class="doi-form" id="doiForm">
+                            <div class="form-group">
+                                <label for="doiInput" class="form-label">DOIs (one per line):</label>
+                                <textarea 
+                                    id="doiInput" 
+                                    class="form-control" 
+                                    rows="5" 
+                                    placeholder="10.1038/nature12373&#10;10.1093/nar/gkr1047&#10;10.1126/science.1259855"
+                                    required></textarea>
+                            </div>
+                            
+                            <div class="sample-dois">
+                                <h4>Sample DOIs:</h4>
+                                <div class="sample-list">
+                                    <button type="button" class="btn btn--secondary btn--sm" onclick="addSampleDOI('10.1038/nature12373')">10.1038/nature12373</button>
+                                    <button type="button" class="btn btn--secondary btn--sm" onclick="addSampleDOI('10.1093/nar/gkr1047')">10.1093/nar/gkr1047</button>
+                                </div>
+                            </div>
+
+                            <div class="validation-message" id="validationMessage"></div>
+                            
+                            <button type="submit" class="btn btn--primary">
+                                Fetch Metadata
+                                <span class="loading-spinner hidden" id="loadingSpinner"></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Metadata Retrieval -->
+            <div class="step-content" id="step2">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Step 2: Metadata Retrieved from OpenAlex</h2>
+                        <p>Review the metadata fetched for each DOI from the OpenAlex database.</p>
+                        
+                        <div id="metadataResults" class="metadata-results"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: PDF Access Check -->
+            <div class="step-content" id="step3">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Step 3: Open Access PDF Availability</h2>
+                        <p>Checking Unpaywall database for available open access PDF files.</p>
+                        
+                        <div id="pdfResults" class="pdf-results"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Metadata Mapping -->
+            <div class="step-content" id="step4">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Step 4: Map Metadata Fields</h2>
+                        <p>Map OpenAlex metadata fields to Dublin Core fields used by QSpace repository.</p>
+                        
+                        <div class="mapping-interface">
+                            <div class="mapping-section">
+                                <h3>Field Mapping Configuration</h3>
+                                <div id="mappingFields" class="mapping-fields"></div>
+                            </div>
+                            
+                            <div class="collection-selector">
+                                <h3>Select Target Collection</h3>
+                                <select id="collectionSelect" class="form-control">
+                                    <option value="">Select a collection...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Repository Deposit -->
+            <div class="step-content" id="step5">
+                <div class="card">
+                    <div class="card__body">
+                        <h2>Step 5: Repository Deposit Simulation</h2>
+                        <p>Preview the final mapped metadata and simulate deposit to QSpace repository.</p>
+                        
+                        <div id="depositPreview" class="deposit-preview"></div>
+                        
+                        <div class="deposit-actions">
+                            <button id="depositButton" class="btn btn--primary btn--lg">
+                                Simulate Deposit to QSpace
+                            </button>
+                        </div>
+                        
+                        <div id="depositResults" class="deposit-results hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation">
+                <button id="prevButton" class="btn btn--outline" disabled>Previous</button>
+                <button id="nextButton" class="btn btn--primary" disabled>Next</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
